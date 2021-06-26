@@ -1,0 +1,97 @@
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class ActionTest {
+    private StubRobot testBot;
+    private StubAction testAction;
+
+    /**
+     * Stub action class to check if methods have been called
+     */
+    static class StubAction extends Action {
+        boolean checkedPreConditions = false;
+        boolean hasExecuted = false;
+        boolean meetsPreConditions = true;
+
+        /**
+         * @param pName  Name of action
+         * @param pRobot Robot to call action on
+         * @pre pName != null && pRobot != null
+         */
+        public StubAction(String pName, Robot pRobot) {
+            super(pName, pRobot);
+        }
+
+        @Override
+        public Boolean checkPreConditions() {
+            checkedPreConditions = true;
+            return meetsPreConditions;
+        }
+
+        @Override
+        protected void execute() {
+            hasExecuted = true;
+
+        }
+
+        @Override
+        public void accept(ActionVisitor pVisitor) {}
+    }
+
+
+    @Before
+    public void setUp() {
+        testBot = new StubRobot();
+        testAction = new StubAction("Test", testBot);
+        /*try {
+            Field nameField = Action.class.getDeclaredField("aName");
+            Field robotField = Action.class.getDeclaredField("aRobot");
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }*/
+
+    }
+
+    @Test
+    public void testPerformChecksConditions(){
+        testAction.perform();
+        assertTrue(testAction.checkedPreConditions);
+    }
+
+    @Test
+    public void testPerformExecutes_PreconditionsMet(){
+        testAction.perform();
+        assertTrue(testAction.hasExecuted);
+    }
+
+    @Test
+    public void testPerformExecutes_PreconditionsNotMet(){
+        testAction.meetsPreConditions = false;
+        testAction.perform();
+        assertFalse(testAction.hasExecuted);
+    }
+
+    @Test
+    public void testRecharged_HighBattery(){
+        testAction.perform();
+        assertFalse(testBot.rechargeCalled);
+    }
+
+    @Test
+    public void testRecharge_Lowbattery(){
+        testAction.perform();
+        assertTrue(testBot.rechargeCalled);
+    }
+
+    @Test
+    public void testSetName(){
+        String newName = "new name";
+        testAction.setName(newName);
+        assertTrue(newName.equals(testAction.getName()));
+    }
+
+}
