@@ -1,0 +1,9 @@
+public abstract class AbstractActionVisitor implements ActionVisitor{
+    public void visitCompactObjectAction( CompactObjectAction pAction ){ };
+    public void visitComplexAction( ComplexAction pAction ) { };
+    public void visitEmptyCompactorAction( EmptyCompactorAction pAction ) { };
+    public void visitGrabAction( GrabAction pAction ) { };
+    public void visitMoveForwardAction( MoveForwardAction pAction ) { };
+    public void visitReleaseAction( ReleaseAction pAction ) { };
+    public void visitTurnAction( TurnAction pAction ) { };
+}
